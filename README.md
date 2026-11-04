@@ -14,6 +14,19 @@
 
 助手应先确认源文件、版本与输出格式，再按照 skill 执行全文翻译、整理来源映射、核对公式和图表。项目输出通常包括 `paper.md`、`source_map.json`、`translation_notes.md`、`assets/`，按需另生成 PDF。阅读顺序、公式密集程度和论文长度会影响处理时间。
 
+输出目录示例：
+
+```text
+paper-project/
+├── paper.md                 # 带来源位置的全文中英对照
+├── source_map.json          # 原文块、页码、翻译与图表位置
+├── translation_notes.md    # 工具、未确定内容、核对与限制
+├── assets/                 # 公式、图片或表格资源
+└── output/pdf/             # 用户需要时生成的 PDF
+```
+
+可根据需要在请求中指定段落式中英对照、保留原页加中文译页、仅翻译指定章节或术语偏好。没有可靠作者源码时，保留原页公式截图是兜底方案，其结果不是可编辑 LaTeX。
+
 如需检查结果的基础结构，可运行：
 
 ```sh
@@ -21,6 +34,8 @@ python paper-translator/scripts/check_reader.py path/to/project
 ```
 
 该检查只验证文件存在、JSON 块 ID 和图片路径等基础结构；公式是否正确、图表是否完整及版面是否可读仍需实际核对。
+
+`source_map.json` 采用 JSON 对象，至少包含非空的 `blocks` 数组；每个块需要唯一的字符串 `id`。建议同时记录 `type`、`page`、`original`、`translation`，图片块使用 `asset` 记录相对于项目根目录的路径。辅助脚本只使用 Python 标准库，适用于 Python 3.9 及以上版本。
 
 ## 公式与图表
 
